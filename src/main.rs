@@ -55,7 +55,7 @@ async fn main() -> anyhow::Result<()> {
 
     if archive_all == true { // if --all=<true|false> (-a) is passed as args - all of the basic collections are replicated
         overwrite = true;
-        dbg!(format!("overwrite={}", overwrite));
+        println!("overwrite={}", overwrite);
         
         let to_be_archived: Vec<&str> = vec!(TRACINGS_COLL, SALE_COLL, DATA_WAREHOUSE_COLL, ROSTER_COLL);
 
@@ -66,7 +66,7 @@ async fn main() -> anyhow::Result<()> {
             }, coll, &overwrite).await.unwrap();
         }        
     } else { // else --collection=<string> (-c) is required; --database=<string> (-d) && --set_database=<true> (-s) is required for a non-standard collection
-        dbg!(format!("overwrite={}", overwrite));
+        println!("overwrite={}", overwrite);
 
         let db: &str = match args.set_database.as_str() {
             "true" => args.database.as_str(),
@@ -76,7 +76,7 @@ async fn main() -> anyhow::Result<()> {
                 "roster" => REBATE_DB,
                 "data_warehouse" => REBATE_DB,            
                 _ => {
-                    dbg!(format!("collection={}", args.collection));
+                    println!("collection={}", args.collection);
                     panic!("if set_database is false, database must be pre-mapped, else set_database explicitly");
                 }
             },
@@ -92,7 +92,7 @@ async fn main() -> anyhow::Result<()> {
                 match mongo.collection_exists(db, &args.collection).await.unwrap() {
                     true => mongo.archive(db, &args.collection, &overwrite).await.unwrap(),
                     false => {
-                        dbg!(format!("collection={} does not exist in database={}", args.collection, db));                    
+                        println!("collection={} does not exist in database={}", args.collection, db);                    
                         panic!("collection={} does not exist in database={}", &args.collection, db);
                     }
                 }

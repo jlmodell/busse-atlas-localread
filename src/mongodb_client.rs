@@ -39,17 +39,17 @@ impl Mongo {
             let collections = dev_db.list_collection_names(doc!{}).await?;
 
             if collections.contains(&collection.to_string()) {
-                dbg!(format!("dropping collection={}", collection));                
+                println!("dropping collection={}", collection);
                 dev_coll.delete_many(doc!{}, None).await?;
             };
 
-            dbg!(format!("inserting {} documents to collection={}", to_be_inserted.len(), collection));
+            println!("inserting {} documents to collection={}", to_be_inserted.len(), collection);
             
             dev_coll.insert_many(&to_be_inserted, None).await?;
             
-            dbg!(format!("done archiving {} documents in collection={}", to_be_inserted.len(), collection));
+            println!("done archiving {} documents in collection={}", to_be_inserted.len(), collection);
         } else {
-            dbg!(format!("{} documents available in collection={}", to_be_inserted.len(), collection));
+            println!("{} documents available in collection={}", to_be_inserted.len(), collection);
         }       
 
         Ok(())
